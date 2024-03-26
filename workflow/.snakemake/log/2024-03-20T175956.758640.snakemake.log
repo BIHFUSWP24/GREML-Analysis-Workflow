@@ -1,3 +1,0 @@
-SyntaxError in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/greml.smk, line 8:
-invalid syntax
-  File "/sc-projects/sc-proj-dh-ag-eils-ml/workflow/Snakefile", line 3, in <module>

@@ -1,9 +1,0 @@
-Building DAG of jobs...
-MissingInputException in rule merge_grm in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk, line 59:
-Missing input files for rule merge_grm:
-    output: /home/lesi11/testData/test_merged.grm.bin, /home/lesi11/testData/test_merged.grm.N.bin, /home/lesi11/testData/test_merged.grm.id
-    wildcards: name=test
-    affected files:
-        /home/lesi11/testData/test_chr1.grm.N.bin
-        /home/lesi11/testData/test_chr1.grm.bin
-        /home/lesi11/testData/test_chr1.grm.id

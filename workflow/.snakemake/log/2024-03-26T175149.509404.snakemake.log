@@ -1,4 +1,0 @@
-Building DAG of jobs...
-WildcardError in rule merge_grm in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk, line 58:
-Wildcards in input files cannot be determined from output files:
-'chrom'
