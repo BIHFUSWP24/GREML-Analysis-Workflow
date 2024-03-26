@@ -1,4 +1,0 @@
-WorkflowError in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/Snakefile, line 2:
-Failed to open source file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/*.smk
-FileNotFoundError: [Errno 2] No such file or directory: '/sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/*.smk'
-  File "/sc-projects/sc-proj-dh-ag-eils-ml/workflow/Snakefile", line 2, in <module>

@@ -1,7 +1,0 @@
-Building DAG of jobs...
-MissingInputException in rule run_greml in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/greml.smk, line 1:
-Missing input files for rule run_greml:
-    output: /home/lesi11/testData/test.hsq
-    wildcards: name=test
-    affected files:
-        /home/lesi11/testData/test.grm.id

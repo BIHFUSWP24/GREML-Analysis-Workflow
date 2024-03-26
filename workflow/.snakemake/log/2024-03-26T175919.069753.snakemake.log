@@ -1,4 +1,0 @@
-KeyError in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk, line 61:
-'chrosomes'
-  File "/sc-projects/sc-proj-dh-ag-eils-ml/workflow/Snakefile", line 2, in <module>
-  File "/sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk", line 61, in <module>

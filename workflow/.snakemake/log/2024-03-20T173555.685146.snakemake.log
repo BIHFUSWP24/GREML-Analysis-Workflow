@@ -1,3 +1,0 @@
-SyntaxError in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk, line 19:
-Command must be given as string after the shell keyword. (grm.smk, line 19)
-  File "/sc-projects/sc-proj-dh-ag-eils-ml/workflow/Snakefile", line 2, in <module>
