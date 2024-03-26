@@ -1,0 +1,3 @@
+Building DAG of jobs...
+PeriodicWildcardError in rule merge_grm in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk, line 59:
+The value _chr1 in wildcard name is periodically repeated (test_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1_chr1). This would lead to an infinite recursion. To avoid this, e.g. restrict the wildcards in this rule to certain values.

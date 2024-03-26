@@ -1,0 +1,4 @@
+Building DAG of jobs...
+WildcardError in rule all in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/Snakefile, line 6:
+Wildcards in input files cannot be determined from output files:
+'test'

@@ -1,0 +1,10 @@
+directory: /home/lesi11/testData
+
+threads: 10
+
+chromosomes: [1]
+
+maf: 0.01
+grm_cutoff: 0.025
+covariates: False
+

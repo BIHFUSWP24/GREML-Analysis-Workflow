@@ -1,0 +1,12 @@
+configfile: "config.yaml"
+include: "rules/grm.smk"
+include: "rules/greml.smk"
+
+
+rule all:
+  input: f"{config['directory']}/test.hsq"
+  # input: f"{config['directory']}/multi-grm-selection_testPRE.txt"
+
+# Examples
+# f"{config['directory']}/{{name}}_size=100.grm.csv"
+# f"{config['directory']}/{{name}}.hsq"

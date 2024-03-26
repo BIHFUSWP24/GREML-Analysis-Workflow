@@ -1,0 +1,53 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job          count
+---------  -------
+all              1
+merge_grm        1
+run_greml        1
+total            3
+
+Select jobs to execute...
+
+[Tue Mar 26 18:06:40 2024]
+rule merge_grm:
+    input: /home/lesi11/testData/test_chr1.grm.bin, /home/lesi11/testData/test_chr1.grm.N.bin, /home/lesi11/testData/test_chr1.grm.id, /home/lesi11/testData/multi-grm-selection_test.txt
+    output: /home/lesi11/testData/test_merged.grm.bin, /home/lesi11/testData/test_merged.grm.N.bin, /home/lesi11/testData/test_merged.grm.id
+    jobid: 2
+    reason: Missing output files: /home/lesi11/testData/test_merged.grm.id, /home/lesi11/testData/test_merged.grm.bin
+    wildcards: name=test
+    resources: tmpdir=/tmp
+
+[Tue Mar 26 18:06:43 2024]
+Finished job 2.
+1 of 3 steps (33%) done
+Select jobs to execute...
+
+[Tue Mar 26 18:06:43 2024]
+rule run_greml:
+    input: /home/lesi11/testData/test_merged.grm.bin, /home/lesi11/testData/test_merged.grm.id, /home/lesi11/testData/test.phen
+    output: /home/lesi11/testData/test.hsq
+    jobid: 1
+    reason: Missing output files: /home/lesi11/testData/test.hsq; Input files updated by another job: /home/lesi11/testData/test_merged.grm.id, /home/lesi11/testData/test_merged.grm.bin; Set of input files has changed since last execution
+    wildcards: name=test
+    resources: tmpdir=/tmp
+
+[Tue Mar 26 18:07:10 2024]
+Finished job 1.
+2 of 3 steps (67%) done
+Select jobs to execute...
+
+[Tue Mar 26 18:07:10 2024]
+rule all:
+    input: /home/lesi11/testData/test.hsq
+    jobid: 0
+    reason: Input files updated by another job: /home/lesi11/testData/test.hsq
+    resources: tmpdir=/tmp
+
+[Tue Mar 26 18:07:14 2024]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: .snakemake/log/2024-03-26T180634.605834.snakemake.log

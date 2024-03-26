@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job                    count
+-------------------  -------
+all                        1
+merge_grm                  1
+run_greml                  1
+write_grm_selection        1
+total                      4
+
+Select jobs to execute...
+
+[Tue Mar 26 18:05:14 2024]
+rule write_grm_selection:
+    output: /home/lesi11/testData/multi-grm-selection_test.txt
+    jobid: 4
+    reason: Code has changed since last execution
+    wildcards: prefix=test
+    resources: tmpdir=/tmp
+
+RuleException in rule write_grm_selection in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk, line 77:
+NameError: The name "'directory'" is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}, when formatting the following:
+
+    prefix={wildcards.prefix}
+    directory={config['directory']}
+    for chrom in {params.chromosomes};
+    do
+      echo "${{directory}}/${{prefix}}_chr${{chrom}}" >> {output}
+    done
+    

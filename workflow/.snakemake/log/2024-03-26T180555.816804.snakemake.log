@@ -1,0 +1,46 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job                    count
+-------------------  -------
+all                        1
+merge_grm                  1
+run_greml                  1
+write_grm_selection        1
+total                      4
+
+Select jobs to execute...
+
+[Tue Mar 26 18:05:59 2024]
+rule write_grm_selection:
+    output: /home/lesi11/testData/multi-grm-selection_test.txt
+    jobid: 4
+    reason: Code has changed since last execution; Params have changed since last execution
+    wildcards: prefix=test
+    resources: tmpdir=/tmp
+
+[Tue Mar 26 18:05:59 2024]
+Finished job 4.
+1 of 4 steps (25%) done
+Select jobs to execute...
+
+[Tue Mar 26 18:05:59 2024]
+rule merge_grm:
+    input: /home/lesi11/testData/test_chr1.grm.bin, /home/lesi11/testData/test_chr1.grm.N.bin, /home/lesi11/testData/test_chr1.grm.id, /home/lesi11/testData/multi-grm-selection_test.txt
+    output: /home/lesi11/testData/test_merged.grm.bin, /home/lesi11/testData/test_merged.grm.N.bin, /home/lesi11/testData/test_merged.grm.id
+    jobid: 2
+    reason: Missing output files: /home/lesi11/testData/test_merged.grm.id, /home/lesi11/testData/test_merged.grm.bin; Input files updated by another job: /home/lesi11/testData/multi-grm-selection_test.txt
+    wildcards: name=test
+    resources: tmpdir=/tmp
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in rule merge_grm in file /sc-projects/sc-proj-dh-ag-eils-ml/workflow/rules/grm.smk, line 59:
+Job 2  completed successfully, but some output files are missing. Missing files after 5 seconds. This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait:
+/home/lesi11/testData/test_merged.grm.bin
+/home/lesi11/testData/test_merged.grm.N.bin
+/home/lesi11/testData/test_merged.grm.id
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2024-03-26T180555.816804.snakemake.log
