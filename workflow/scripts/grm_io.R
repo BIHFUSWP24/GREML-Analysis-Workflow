@@ -1,4 +1,6 @@
-prefix=snakemake@params[["prefix"]]
+BinFileName=snakemake@input[["grm"]]
+NFileName=snakemake@input[["grmN"]]
+IDFileName=snakemake@input[["grmId"]]
 out_size=snakemake@wildcards[["size"]]
 output=snakemake@output[["file"]]
 
@@ -7,9 +9,6 @@ AllN=FALSE
 sum_i=function(i){
   return(sum(1:i))
 }
-BinFileName=paste(prefix,".grm.bin",sep="")
-NFileName=paste(prefix,".grm.N.bin",sep="")
-IDFileName=paste(prefix,".grm.id",sep="")
 id = read.table(IDFileName)
 n=dim(id)[1]
 if(out_size=="all"){
@@ -33,6 +32,5 @@ fullGRM = fullGRM + t(fullGRM) - diag(diag(fullGRM))
 
 i=sapply(1:n, sum_i)
 grm = list(diag=grm[i], off=grm[-i], fullGRM = fullGRM, id=id, N=N)
-dim(grm$fullGRM)
 
 write.csv(grm$fullGRM[1:out_size,1:out_size], file = output)

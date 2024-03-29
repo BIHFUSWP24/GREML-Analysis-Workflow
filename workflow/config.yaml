@@ -1,4 +1,7 @@
-directory: /home/lesi11/testData
+data_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/testData
+build_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build
+results_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results
+
 
 threads: 10
 

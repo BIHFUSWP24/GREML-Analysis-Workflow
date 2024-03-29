@@ -1,8 +1,16 @@
-configfile: "/sc-projects/sc-proj-dh-ag-eils-ml/GREML/workflow/config.yaml"
+configfile: "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/code/GREML/workflow/config.yaml"
 include: "rules/grm.smk"
 include: "rules/greml.smk"
+include: "rules/visualization.smk"
 
 
 rule all:
-  input: f"{config['directory']}/test.hsq"
-  # input: f"{config['directory']}/test_size=100.grm.csv"
+  input:
+    # grm = f"{config['build_directory']}/test_merged.grm",
+    # f"{config['results_directory']}/test.hsq",
+    # f"{config['results_directory']}/test_size=100.grm.csv",
+    # f"{config['build_directory']}/multi-grm-selection_test.txt",
+    # f"{config['build_directory']}/test.tsv",
+    f"{config['results_directory']}/test_histogram.png",
+    # f"{config['results_directory']}/test_pheatmap.png",
+    # f"{config['results_directory']}/test_heatmap.png",
