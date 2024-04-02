@@ -40,8 +40,6 @@ if (mode == "pheatmap") {
   heatmap(fullGRM,
           scale = "none",
           col = color_palette,
-          # cluster_rows = hclust(dist(fullGRM))
-          # cluster_cols = hclust(dist(t(fullGRM)))
           # Rowv = NA,
           # Colv = NA,
           labRow = "",
