@@ -29,8 +29,8 @@ if (mode == "pheatmap") {
       scale = "none",
       color = color_palette,
       filename = output_file,
-      cluster_rows = FALSE,
-      cluster_cols = FALSE,
+      # cluster_rows = FALSE,
+      # cluster_cols = FALSE,
       show_rownames = FALSE,
       show_colnames = FALSE)
   dev.off()
@@ -40,8 +40,10 @@ if (mode == "pheatmap") {
   heatmap(fullGRM,
           scale = "none",
           col = color_palette,
-          Rowv = NA,
-          Colv = NA,
+          # cluster_rows = hclust(dist(fullGRM))
+          # cluster_cols = hclust(dist(t(fullGRM)))
+          # Rowv = NA,
+          # Colv = NA,
           labRow = "",
           labCol = "")
   dev.off()

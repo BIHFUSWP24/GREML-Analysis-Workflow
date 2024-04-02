@@ -11,6 +11,6 @@ rule all:
     # f"{config['results_directory']}/test_size=100.grm.csv",
     # f"{config['build_directory']}/multi-grm-selection_test.txt",
     # f"{config['build_directory']}/test.tsv",
-    f"{config['results_directory']}/test_histogram.png",
-    # f"{config['results_directory']}/test_pheatmap.png",
+    # f"{config['results_directory']}/test_histogram.png",
+    f"{config['results_directory']}/test_pheatmap.png",
     # f"{config['results_directory']}/test_heatmap.png",
