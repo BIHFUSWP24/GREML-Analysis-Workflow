@@ -1,3 +1,4 @@
+prefix: 100k_snp_chr1
 data_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/testData
 build_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build
 results_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results
@@ -6,6 +7,28 @@ results_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/
 threads: 10
 
 chromosomes: [1]
+
+distance_methods: 
+  - correlation
+  - cosine
+  # - euclidean
+  # - cityblock
+  # - euclidean
+  # - l1
+  # - l2
+  # - manhattan
+  # - canberra
+  # - chebyshev
+  # - hamming
+  # - mahalanobis
+  # - minkowski
+  # - seuclidean
+  # - sqeuclidean
+
+plot_methods: 
+  - heatmap
+  # - histogram
+
 
 maf: 0.01
 grm_cutoff: 0.025

@@ -9,4 +9,4 @@ fullGRM <- matrix(0, nrow = n, ncol = n, dimnames = list(NULL, NULL))
 fullGRM[upper.tri(fullGRM, diag = TRUE)] <- genetic_relationships
 fullGRM <- fullGRM + t(fullGRM) - diag(diag(fullGRM))
 
-write.table(fullGRM, output_file, sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
+write.table(fullGRM, output_file, sep = ",", row.names = FALSE, col.names = FALSE, quote = FALSE)
