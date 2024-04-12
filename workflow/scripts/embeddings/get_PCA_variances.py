@@ -3,11 +3,6 @@ from sklearn.decomposition import PCA
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-# from sklearn.manifold import TSNE
-# import umap
-# from sklearn.decomposition import KernelPCA
-# from scipy.spatial.distance import pdist, squareform
-# import seaborn as sns
 
 data_path = '/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/100k_snp_chr1.h5ad'
 csv_path = '/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/pca_variances.csv'

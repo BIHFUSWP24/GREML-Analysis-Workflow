@@ -1,0 +1,27 @@
+.bgen -> filtered .bed
+plink2 --bgen deine_bgen_datei.bgen ref-first --sample deine_bgen_datei.sample --keep individuals.txt --extract snps.txt --make-bed --out konvertierte_daten
+plink2 --bgen /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.bgen ref-first --sample /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.sample --keep-fam /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/100k_all_eid.txt --extract /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/100k_all_srid.txt --make-bed --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered
+
+.bed -> .grm.gz
+gcta64 --bfile filtered_dataset --make-grm-gz --out grm_output
+gcta64 --bfile /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered --make-grm-gz --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered
+
+.grm.gz -> .grm
+gzip -dc /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered.grm.gz > /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered.grm
+
+.grm.gz -> .hsq
+gcta64 --grm-gz /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered --pheno /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/phenotypes/hip_circumference_f49_0_0.phen --reml --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/100k_snp_chr1/pca/868dims/hip_pearson
+
+.grm -> .hsq
+gcta64 --grm /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered --pheno /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/phenotypes/hip_circumference_f49_0_0.phen --reml --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/100k_snp_chr1/pca/868dims/hip_pearson
+
+
+read bgen
+1. index erstellen
+bgenix -g /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.bgen -index
+2. auslesen
+bgenix -g /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.bgen -list > /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/bgen_list.txt
+3. filter spalte 1
+cut -f2 bgen_list.txt > bgen_list_s1.txt
+(4. filter eids from .sample)
+cut -d' ' -f1 /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.sample > /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/sample_eid_list.txt
