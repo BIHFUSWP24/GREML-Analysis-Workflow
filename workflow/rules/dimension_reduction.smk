@@ -23,9 +23,9 @@ rule UMAP:
 
 
 rule distances:
-    input: input_file = f"{config['build_directory']}/{{name}}.h5ad"
+    input: input_file = f"{config['build_directory']}/{{dir}}.h5ad"
     output:
-        grm_output = f"{config['build_directory']}/{{name}}_{{distance_method}}.grm",
-        gz_output = f"{config['build_directory']}/{{name}}_{{distance_method}}.grm.gz",
-        csv_output = f"{config['build_directory']}/{{name}}/{{distance_method}}.grm.csv",
+        grm_output = f"{config['build_directory']}/{{dir}}/{{distance_method}}.grm",
+        gz_output = f"{config['build_directory']}/{{dir}}/{{distance_method}}.grm.gz",
+    log: 'logs/{dir}/{distance_method}.log'
     script: '../scripts/distance_matrix.py'
