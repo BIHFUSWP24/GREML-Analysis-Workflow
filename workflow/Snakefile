@@ -1,23 +1,29 @@
 configfile: "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/code/GREML/workflow/config.yaml"
-# include: "rules/greml.smk"
+include: "rules/helpers.smk"
 include: "rules/dimension_reduction.smk"
+include: "rules/grm.smk"
+include: "rules/phenotypes.smk"
+include: "rules/greml.smk"
 include: "rules/visualization.smk"
+
+ruleorder: merge_grm > chromosome_grm > grm_to_grm_gz
 
 
 rule all:
-  input:
-    f"{config['results_directory']}/100k_snp_chr1/kernelPCA/868dims/pearson_correlation.png",
-    # expand("{build_directory}/100k_snp_chr1/UMAP/{dims}dims{neighbors}nn.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211], neighbors=[15,30]),
-    # expand("{build_directory}/100k_snp_chr1/tSNE/{dims}dims{pxt}pxt.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211], pxt=[35,50]),
-    # expand("{build_directory}/100k_snp_chr1/kernelPCA/{dims}dims.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211]),
-    # expand("{build_directory}/100k_snp_chr1/PCA/{dims}dims.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211]),
-    # expand("{results_directory}/100k_snp_chr1/PCA/{dims}dims/{distance_method}_{plot_method}.png", results_directory=config['results_directory'], dims=[868,1254,1932,8211], distance_method=config['distance_methods'], plot_method=config['plot_methods']),
-    # f"{config['build_directory']}/100k_snp_chr1_pca_10dims.h5ad"
-    # grm = f"{config['build_directory']}/test_merged.grm",
-    # f"{config['results_directory']}/test.hsq",
-    # f"{config['results_directory']}/test_size=100.grm.csv",
-    # f"{config['build_directory']}/multi-grm-selection_test.txt",
-    # f"{config['build_directory']}/test.tsv",
-    # f"{config['results_directory']}/test_histogram.png",
-    # f"{config['results_directory']}/test_pheatmap.png",
-    # f"{config['results_directory']}/test_heatmap.png",
+    input:
+        expand("{build_directory}/ukb_imp_v3_f/PCA/{dimensions}dims.h5ad", build_directory=config['build_directory'], dimensions=10),
+        # expand("{build_directory}/phenotypes/{phenotype}_{mode}.phen", build_directory=config['build_directory'], phenotype=config['phenotypes'], mode=['original', 'normalized']),
+        # expand("{build_directory}/ukb_imp_v3_f/{phenotype}_{mode}.hsq", build_directory=config['build_directory'], phenotype=config['phenotypes'], mode=['original', 'normalized']),
+        # f"{config['results_directory']}/ukb_imp_v3_greml_summary.tsv",
+        # f"{config['build_directory']}/ukb_imp_v3_f/ukb_imp_v3.grm.gz",
+        # f"{config['results_directory']}/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered_heatmap.png",
+        # f"{config['results_directory']}/100k_snp_chr1/PCA/868dims/pearson_heatmap.png",
+        # f"{config['results_directory']}/100k_snp_chr1/PCA/868dims/spearman_heatmap.png",
+        # f"{config['build_directory']}/100k_snp_chr1/kernelPCA/868dims/spearman.grm",
+        # f"{config['build_directory']}/100k_snp_chr1/kernelPCA/868dims/pearson.grm",
+        # expand("{build_directory}/100k_snp_chr1/UMAP/{dims}dims{neighbors}nn.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211], neighbors=[15,30]),
+        # expand("{build_directory}/100k_snp_chr1/tSNE/{dims}dims{pxt}pxt.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211], pxt=[35,50]),
+        # expand("{build_directory}/100k_snp_chr1/kernelPCA/{dims}dims.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211]),
+        # expand("{build_directory}/100k_snp_chr1/PCA/{dims}dims.h5ad", build_directory=config['build_directory'], dims=[868,1254,1932,8211]),
+        # expand("{results_directory}/100k_snp_chr1/PCA/{dims}dims/{distance_method}_{plot_method}.png", results_directory=config['results_directory'], dims=[868,1254,1932,8211], distance_method=config['distance_methods'], plot_method=config['plot_methods']),
+        # f"{config['build_directory']}/100k_snp_chr1_pca_10dims.h5ad"

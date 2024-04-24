@@ -1,0 +1,30 @@
+jobscript: "jobscript.sh"
+cluster: "sbatch \
+    --partition=compute \
+    --time=24:00:00 \
+    --mem={resources.mem_mb} \
+    --cpus-per-task={threads} \
+    --parsable \
+    --output=logs/{rule}/%j_{wildcards}.out \
+    --error=logs/{rule}/%j_{wildcards}.err "
+jobs: 5
+use-conda: True
+latency-wait: 30000
+cluster-cancel: scancel
+default-resources:
+    mem_mb: 8000
+set-threads:
+    filter_genome: 24
+    chromosome_grm: 24
+    merge_grm: 112
+    run_greml: 24
+set-resources:
+    filter_genome:
+        mem_mb: 100000
+    chromosome_grm:
+        mem_mb: 100000
+    merge_grm:
+        mem_mb: 128000
+    run_greml:
+        mem_mb: 100000
+local-cores: 1
