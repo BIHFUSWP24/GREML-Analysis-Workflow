@@ -17,3 +17,7 @@ rule grm_to_csv:
   output: file = f"{config['build_directory']}/{{name}}.grm.csv"
   script: 
     "../scripts/grm_to_csv.R"
+
+
+# snakemake --forceall --dag | dot -Tpdf > /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/GREML_dag.pdf
+# snakemake --report /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/report.html

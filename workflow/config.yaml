@@ -1,12 +1,15 @@
 prefix: 100k_snp_chr1
-data_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/testData
+data_directory: /sc-projects/sc-proj-ukb-cvd/data/0_raw/showcase_48024/ukb_genomics
 build_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build
 results_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results
+phenotype_files:
+  original: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/continuous_phenotypes_original_encoding.feather
+  normalized: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/continuous_phenotypes.csv
 
 
-threads: 10
+threads: 2
 
-chromosomes: [1]
+chromosomes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]   
 
 distance_methods: 
   - correlation
@@ -27,10 +30,89 @@ distance_methods:
 
 plot_methods: 
   - heatmap
-  # - histogram
-
 
 maf: 0.01
 grm_cutoff: 0.025
 covariates: False
 
+phenotypes:
+  - measurements_standing_height_f50_0_0
+  - measurements_body_mass_index_bmi_f21001_0_0
+  - measurements_waist_circumference_f48_0_0
+  - measurements_hip_circumference_f49_0_0
+  - measurements_systolic_blood_pressure_automated_reading_f4080
+  - measurements_diastolic_blood_pressure_automated_reading_f4079
+  # - labs_ldl_direct_f30780_0_0
+  # - labs_hdl_cholesterol_f30760_0_0
+  # - questionaire_townsend_deprivation_index_at_recruitment_f189_0_0
+  # - measurements_pulse_wave_arterial_stiffness_index_f21021_0_0
+  # - measurements_pulse_wave_reflection_index_f4195_0_0
+  # - measurements_trunk_fat_percentage_f23127_0_0
+  # - measurements_body_fat_percentage_f23099_0_0
+  # - measurements_basal_metabolic_rate_f23105_0_0
+  # - measurements_forced_vital_capacity_fvc_best_measure_f20151_0_0
+  # - measurements_forced_expiratory_volume_in_1second_fev1_best_measure_f20150_0_0
+  # - measurements_fev1_fvc_ratio_zscore_f20258_0_0
+  # - measurements_peak_expiratory_flow_pef_f3064_0_2
+  # - measurements_peak_expiratory_flow_pef_f3064_0_1
+  # - measurements_peak_expiratory_flow_pef_f3064_0_0
+  # - measurements_pulse_rate_automated_reading_f102
+  # - labs_basophill_count_f30160_0_0
+  # - labs_basophill_percentage_f30220_0_0
+  # - labs_eosinophill_count_f30150_0_0
+  # - labs_eosinophill_percentage_f30210_0_0
+  # - labs_haematocrit_percentage_f30030_0_0
+  # - labs_haemoglobin_concentration_f30020_0_0
+  # - labs_high_light_scatter_reticulocyte_count_f30300_0_0
+  # - labs_high_light_scatter_reticulocyte_percentage_f30290_0_0
+  # - labs_immature_reticulocyte_fraction_f30280_0_0
+  # - labs_lymphocyte_count_f30120_0_0
+  # - labs_lymphocyte_percentage_f30180_0_0
+  # - labs_mean_corpuscular_haemoglobin_f30050_0_0
+  # - labs_mean_corpuscular_haemoglobin_concentration_f30060_0_0
+  # - labs_mean_corpuscular_volume_f30040_0_0
+  # - labs_mean_platelet_thrombocyte_volume_f30100_0_0
+  # - labs_mean_reticulocyte_volume_f30260_0_0
+  # - labs_mean_sphered_cell_volume_f30270_0_0
+  # - labs_monocyte_count_f30130_0_0
+  # - labs_monocyte_percentage_f30190_0_0
+  # - labs_neutrophill_count_f30140_0_0
+  # - labs_neutrophill_percentage_f30200_0_0
+  # - labs_nucleated_red_blood_cell_count_f30170_0_0
+  # - labs_nucleated_red_blood_cell_percentage_f30230_0_0
+  # - labs_platelet_count_f30080_0_0
+  # - labs_platelet_crit_f30090_0_0
+  # - labs_platelet_distribution_width_f30110_0_0
+  # - labs_red_blood_cell_erythrocyte_count_f30010_0_0
+  # - labs_red_blood_cell_erythrocyte_distribution_width_f30070_0_0
+  # - labs_reticulocyte_count_f30250_0_0
+  # - labs_reticulocyte_percentage_f30240_0_0
+  # - labs_white_blood_cell_leukocyte_count_f30000_0_0
+  # - labs_alanine_aminotransferase_f30620_0_0
+  # - labs_albumin_f30600_0_0
+  # - labs_alkaline_phosphatase_f30610_0_0
+  # - labs_apolipoprotein_a_f30630_0_0
+  # - labs_apolipoprotein_b_f30640_0_0
+  # - labs_aspartate_aminotransferase_f30650_0_0
+  # - labs_creactive_protein_f30710_0_0
+  # - labs_calcium_f30680_0_0
+  # - labs_cholesterol_f30690_0_0
+  # - labs_creatinine_f30700_0_0
+  # - labs_cystatin_c_f30720_0_0
+  # - labs_direct_bilirubin_f30660_0_0
+  # - labs_gamma_glutamyltransferase_f30730_0_0
+  # - labs_glucose_f30740_0_0
+  # - labs_glycated_haemoglobin_hba1c_f30750_0_0
+  # - labs_igf1_f30770_0_0
+  # - labs_lipoprotein_a_f30790_0_0
+  # - labs_oestradiol_f30800_0_0
+  # - labs_phosphate_f30810_0_0
+  # - labs_rheumatoid_factor_f30820_0_0
+  # - labs_shbg_f30830_0_0
+  # - labs_testosterone_f30850_0_0
+  # - labs_total_bilirubin_f30840_0_0
+  # - labs_total_protein_f30860_0_0
+  # - labs_triglycerides_f30870_0_0
+  # - labs_urate_f30880_0_0
+  # - labs_urea_f30670_0_0
+  # - labs_vitamin_d_f30890_0_0

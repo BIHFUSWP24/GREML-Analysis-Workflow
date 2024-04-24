@@ -1,15 +1,32 @@
-# gcta64 --grm-gz test_merged --pheno /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/testData/test.phen --reml --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/test
 rule run_greml:
-  input:
-    grm=f"{config['build_directory']}/{{name}}_merged.grm",
-    grmId=f"{config['build_directory']}/{{name}}_merged.grm.id",
-    phenotypes=f"{config['data_directory']}/{{name}}.phen",
-  output: f"{config['results_directory']}/{{name}}.hsq",
-  params:
-    in_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.name}_merged",
-    out_prefix=lambda wildcards: f"{config['results_directory']}/{wildcards.name}",
-  threads: config['threads']
-  shell:
-    """
-    gcta64 --grm-gz {params.in_prefix} --pheno {input.phenotypes} --reml --out {params.out_prefix} --thread-num {threads}
-    """
+    input:
+        grm_file=f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.grm.gz",
+        phenotype_file=f"{config['build_directory']}/phenotypes/{{phenotype}}.phen",
+    output:
+        output_file=f"{config['build_directory']}/{{data_set}}_f/{{phenotype}}.hsq",
+    params:
+        grm_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}_f/{wildcards.data_set}",
+        output_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}_f/{wildcards.phenotype}",
+        results_directory=config['results_directory'],
+    wildcard_constraints:
+        data_set="[^/]+",
+        phenotype="[^/]+",
+    threads: config['threads']
+    conda: "../../envs/embeddings.yaml"
+    shell:
+        """
+        mkdir -p {params.results_directory}/{wildcards.data_set}_f
+        gcta64 --grm-gz {params.grm_prefix} --pheno {input.phenotype_file} --reml --out {params.output_prefix} --thread-num {threads}
+        """
+
+
+rule summerize_heritabilities:
+    input:
+        hsq=expand("{build_directory}/{{data_set}}_f/{phenotype}_{mode}.hsq", build_directory=config['build_directory'], phenotype=config['phenotypes'], mode=["original", "normalized"]),
+    output: 
+        file=f"{config['results_directory']}/{{data_set}}_greml_summary.tsv",
+    params:
+        build_directory=config['build_directory'],
+        phenotypes=config['phenotypes'],
+    conda: "../../envs/r_basic.yaml"
+    script: "../scripts/heritability_summary.R"

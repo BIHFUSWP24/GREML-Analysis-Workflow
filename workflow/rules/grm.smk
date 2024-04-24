@@ -1,64 +1,88 @@
-# gcta64 --bfile /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/testData/test --chr 1 --make-grm-gz --out test_chr1
-rule grm_chrom:
-  input: 
-    f"{config['data_directory']}/{{name}}.bed",
-    f"{config['data_directory']}/{{name}}.bim",
-    f"{config['data_directory']}/{{name}}.fam",
-  output:
-    f"{config['build_directory']}/{{name}}_chr{{chromosome}}.grm.gz",
-    f"{config['build_directory']}/{{name}}_chr{{chromosome}}.grm.id",
-  params:
-    input_prefix=lambda wildcards: f"{config['data_directory']}/{wildcards.name}",
-    output_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.name}_chr{wildcards.chromosome}",
-    threads=config['threads'],
-  shell:
-    """
-    gcta64 --bfile {params.input_prefix} --chr {wildcards.chromosome} --make-grm-gz --thread-num {params.threads} --out {params.output_prefix}
-    """
+rule filter_genome:
+    input:
+        bgen = f"{config['data_directory']}/{{data_set}}_{{chromosome}}_{{version}}.bgen",
+        sample = f"{config['data_directory']}/{{data_set}}_{{chromosome}}_{{version}}.sample",
+        keep_fam = f"{config['build_directory']}/100k_all_eid.txt",
+        extract = f"{config['build_directory']}/100k_all_srid.txt",
+    output:
+        output_bed = f"{config['build_directory']}/{{data_set}}_{{version}}_f/{{chromosome}}.bed",
+        output_bim = f"{config['build_directory']}/{{data_set}}_{{version}}_f/{{chromosome}}.bim",
+        output_fam = f"{config['build_directory']}/{{data_set}}_{{version}}_f/{{chromosome}}.fam",
+    params:
+        output_prefix = lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}_{wildcards.version}_f/{wildcards.chromosome}",
+    threads: config['threads']
+    conda: "../../envs/embeddings.yaml"
+    priority: 2
+    shell:
+        """
+        plink2 \
+            --bgen {input.bgen} ref-first \
+            --sample {input.sample} \
+            --keep-fam {input.keep_fam} \
+            --extract {input.extract} \
+            --make-bed \
+            --threads {threads} \
+            --out {params.output_prefix}
+        """
+
+
+rule chromosome_grm:
+    input: 
+        input_bed = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.bed",
+        input_bim = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.bim",
+        input_fam = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.fam",
+    output:
+        output_grm_gz = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.grm.gz",
+        output_grm_id = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.grm.id",
+    params:
+        input_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}/{wildcards.chromosome}",
+        output_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}/{wildcards.chromosome}",
+    threads: config['threads']
+    conda: "../../envs/embeddings.yaml"
+    priority: 1
+    shell:
+        """
+        gcta64 \
+            --bfile {params.input_prefix} \
+            --make-grm-gz \
+            --thread-num {threads} \
+            --out {params.output_prefix}
+        """
 
 
 rule write_grm_selection:
-  output: f"{config['build_directory']}/multi-grm-selection_{{prefix}}.txt"
+  output: f"{config['build_directory']}/{{data_set}}/multi-grm-selection.txt",
   params:
     chromosomes = config['chromosomes'],
-    directory = config['build_directory'],
+    build_directory = config['build_directory'],
   shell:
     """
-    prefix={wildcards.prefix}
-    directory={params.directory}
+    data_set={wildcards.data_set}
+    build_directory={params.build_directory}
     for chrom in {params.chromosomes};
     do
-      echo "${{directory}}/${{prefix}}_chr${{chrom}}" >> {output}
+      echo "${{build_directory}}/${{data_set}}/chr${{chrom}}" >> {output}
     done
     """
 
 
-# gcta64 --mgrm-gz multi-grm-selection_test.txt --make-grm-gz --out test_merged
 rule merge_grm:
-  input: 
-    grm = expand("{directory}/{{name}}_chr{chromosome}.grm", chromosome=config['chromosomes'], directory=config['build_directory']),
-    grmId = expand("{directory}/{{name}}_chr{chromosome}.grm.id", chromosome=config['chromosomes'], directory=config['build_directory']),
-    selection = f"{config['build_directory']}/multi-grm-selection_{{name}}.txt",
-  output:
-    grm = f"{config['build_directory']}/{{name}}_merged.grm.gz",
-    grmId = f"{config['build_directory']}/{{name}}_merged.grm.id",
-  params:
-    prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.name}_merged",
-  shell:
-    """
-    gcta64 --mgrm-gz {input.selection} --make-grm-gz --out {params.prefix}
-    """
-
-
-
-# gzip -dc test_chr1.grm.gz > test_chr1.grm
-# gzip -dc test_merged.grm.gz > test_merged.grm
-rule grmgz_to_grm:
-  input:
-    grm = f"{config['build_directory']}/{{name}}.grm.gz",
-  output:
-    grm = f"{config['build_directory']}/{{name}}.grm",
-  shell:
-    """
-    gzip -dc {input.grm} > {output.grm}
-    """
+    input: 
+        grm = expand("{directory}/{{data_set}}_f/chr{chromosome}.grm.gz", chromosome=config['chromosomes'], directory=config['build_directory']),
+        grmId = expand("{directory}/{{data_set}}_f/chr{chromosome}.grm.id", chromosome=config['chromosomes'], directory=config['build_directory']),
+        selection = f"{config['build_directory']}/{{data_set}}_f/multi-grm-selection.txt",
+    output:
+        grm = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.grm.gz",
+        grmId = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.grm.id",
+    params:
+        output_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}_f/{wildcards.data_set}",
+    threads: config['threads']
+    conda: "../../envs/embeddings.yaml"
+    shell:
+        """
+        gcta64 \
+            --mgrm-gz {input.selection} \
+            --make-grm-gz \
+            --thread-num {threads} \
+            --out {params.output_prefix}
+        """

@@ -1,0 +1,10 @@
+channels:
+    - conda-forge
+    - bioconda
+dependencies:
+    - r-base=4.3.3
+    - r-reshape2=1.4.4
+    - r-viridis=0.6.5
+    - r-ggplot2=3.5.0
+    - r-dplyr=1.1.4
+    - r-pheatmap=1.0.8
