@@ -17,6 +17,14 @@ gcta64 --grm-gz /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/les
 gcta64 --grm /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb22828_c22_v3/ukb22828_c22_v3_f1 --pheno /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/phenotypes/hip_circumference_f49_0_0.phen --reml --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/100k_snp_chr1/pca/868dims/hip_pearson
 
 
+.bed -> renamed .bed
+plink2 --bfile /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/chr1 --set-all-var-ids @:#\$r,\$a --new-id-max-allele-len 100 --make-bed --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/chr1_f
+plink2 --bfile /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/chr2 --set-all-var-ids @:#\$r,\$a --new-id-max-allele-len 100 --make-bed --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/chr2_f
+plink2 --bfile /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/chr3 --set-all-var-ids @:#\$r,\$a --new-id-max-allele-len 100 --make-bed --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/chr3_f
+
+merge renamed .bed
+
+
 read bgen
 1. index erstellen
 bgenix -g /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.bgen -index
