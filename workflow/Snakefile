@@ -1,7 +1,7 @@
 configfile: "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/code/GREML/workflow/config.yaml"
 include: "rules/helpers.smk"
-include: "rules/dimension_reduction.smk"
 include: "rules/grm.smk"
+# include: "rules/dimension_reduction.smk"
 include: "rules/phenotypes.smk"
 include: "rules/greml.smk"
 include: "rules/visualization.smk"
@@ -11,10 +11,12 @@ ruleorder: merge_grm > chromosome_grm > grm_to_grm_gz
 
 rule all:
     input:
-        expand("{build_directory}/ukb_imp_v3_f/PCA/{dimensions}dims.h5ad", build_directory=config['build_directory'], dimensions=10),
+        f"{config['results_directory']}/basic_greml_summary.tsv",
+        # f"{config['results_directory']}/ukb_imp_v3_greml_summary.tsv",
+        # f"{config['build_directory']}/ukb_imp_v3_f/ukb_imp_v3.bed",
+        # expand("{build_directory}/ukb_imp_v3_f/PCA/{dimensions}dims.h5ad", build_directory=config['build_directory'], dimensions=10),
         # expand("{build_directory}/phenotypes/{phenotype}_{mode}.phen", build_directory=config['build_directory'], phenotype=config['phenotypes'], mode=['original', 'normalized']),
         # expand("{build_directory}/ukb_imp_v3_f/{phenotype}_{mode}.hsq", build_directory=config['build_directory'], phenotype=config['phenotypes'], mode=['original', 'normalized']),
-        # f"{config['results_directory']}/ukb_imp_v3_greml_summary.tsv",
         # f"{config['build_directory']}/ukb_imp_v3_f/ukb_imp_v3.grm.gz",
         # f"{config['results_directory']}/ukb22828_c22_b0_v3/ukb22828_c22_b0_v3_filtered_heatmap.png",
         # f"{config['results_directory']}/100k_snp_chr1/PCA/868dims/pearson_heatmap.png",

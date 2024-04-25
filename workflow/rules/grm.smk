@@ -1,15 +1,15 @@
 rule filter_genome:
     input:
-        bgen = f"{config['data_directory']}/{{data_set}}_{{chromosome}}_{{version}}.bgen",
-        sample = f"{config['data_directory']}/{{data_set}}_{{chromosome}}_{{version}}.sample",
-        keep_fam = f"{config['build_directory']}/100k_all_eid.txt",
-        extract = f"{config['build_directory']}/100k_all_srid.txt",
+        bgen=lambda wildcards: f"{config['dataset']['directory']}/{config['dataset']['format']}.bgen",
+        sample=lambda wildcards: f"{config['dataset']['directory']}/{config['dataset']['format']}.sample",
+        keep_fam=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['dataset']['keep_fam']['file']}",
+        extract=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['dataset']['extract']['file']}",
     output:
-        output_bed = f"{config['build_directory']}/{{data_set}}_{{version}}_f/{{chromosome}}.bed",
-        output_bim = f"{config['build_directory']}/{{data_set}}_{{version}}_f/{{chromosome}}.bim",
-        output_fam = f"{config['build_directory']}/{{data_set}}_{{version}}_f/{{chromosome}}.fam",
+        output_bed=f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome}}.bed",
+        output_bim=f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome}}.bim",
+        output_fam=f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome}}.fam",
     params:
-        output_prefix = lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}_{wildcards.version}_f/{wildcards.chromosome}",
+        output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{wildcards.chromosome}",
     threads: config['threads']
     conda: "../../envs/embeddings.yaml"
     priority: 2
@@ -28,15 +28,15 @@ rule filter_genome:
 
 rule chromosome_grm:
     input: 
-        input_bed = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.bed",
-        input_bim = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.bim",
-        input_fam = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.fam",
+        input_bed=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome}}.bed",
+        input_bim=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome}}.bim",
+        input_fam=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome}}.fam",
     output:
-        output_grm_gz = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.grm.gz",
-        output_grm_id = f"{config['build_directory']}/{{data_set}}/{{chromosome}}.grm.id",
+        output_grm_bin=f"{config['build_directory']}/{config['dataset']['workname']}/grm/chromosomes/chr{{chromosome}}.grm.gz",
+        output_grm_id=f"{config['build_directory']}/{config['dataset']['workname']}/grm/chromosomes/chr{{chromosome}}.grm.id",
     params:
-        input_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}/{wildcards.chromosome}",
-        output_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}/{wildcards.chromosome}",
+        input_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{wildcards.chromosome}",
+        output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/chromosomes/chr{wildcards.chromosome}",
     threads: config['threads']
     conda: "../../envs/embeddings.yaml"
     priority: 1
@@ -50,32 +50,22 @@ rule chromosome_grm:
         """
 
 
-rule write_grm_selection:
-  output: f"{config['build_directory']}/{{data_set}}/multi-grm-selection.txt",
-  params:
-    chromosomes = config['chromosomes'],
-    build_directory = config['build_directory'],
-  shell:
-    """
-    data_set={wildcards.data_set}
-    build_directory={params.build_directory}
-    for chrom in {params.chromosomes};
-    do
-      echo "${{build_directory}}/${{data_set}}/chr${{chrom}}" >> {output}
-    done
-    """
-
-
 rule merge_grm:
     input: 
-        grm = expand("{directory}/{{data_set}}_f/chr{chromosome}.grm.gz", chromosome=config['chromosomes'], directory=config['build_directory']),
-        grmId = expand("{directory}/{{data_set}}_f/chr{chromosome}.grm.id", chromosome=config['chromosomes'], directory=config['build_directory']),
-        selection = f"{config['build_directory']}/{{data_set}}_f/multi-grm-selection.txt",
+        grm=lambda wildcards: expand("{directory}/{workname}/grm/chromosomes/chr{chromosome}.grm.gz",
+            directory=config['build_directory'],
+            workname=config['dataset']['workname'],
+            chromosome=config['profiles'][wildcards.profile]['chromosomes']),
+        grmId=lambda wildcards: expand("{directory}/{workname}/grm/chromosomes/chr{chromosome}.grm.id",
+            directory=config['build_directory'],
+            workname=config['dataset']['workname'],
+            chromosome=config['profiles'][wildcards.profile]['chromosomes']),
+        selection=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/multi-grm-selections/{wildcards.profile}.txt",
     output:
-        grm = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.grm.gz",
-        grmId = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.grm.id",
+        grm=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{profile}}.grm.gz",
+        grmId=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{profile}}.grm.id",
     params:
-        output_prefix=lambda wildcards: f"{config['build_directory']}/{wildcards.data_set}_f/{wildcards.data_set}",
+        output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{wildcards.profile}",
     threads: config['threads']
     conda: "../../envs/embeddings.yaml"
     shell:

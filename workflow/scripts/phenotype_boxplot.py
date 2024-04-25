@@ -2,15 +2,20 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-input_file = "/sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/continuous_phenotypes.csv"
-output_file = "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/phenotype_boxplot.png"
+# input_file = "/sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/continuous_phenotypes.csv"
+# output_file = "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/phenotype_boxplot.png"
+input_file = "/sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/continuous_phenotypes_original_encoding.feather"
+output_file = "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results/phenotype_boxplot_original.png"
 
 # input file format:
 # Phenotype	Min	First_Quartile	Median	Mean	Third_Quartile	Max	Tenth_Percentile	Ninetieth_Percentile	NA_count
 # questionaire_townsend_deprivation_index_at_recruitment_f189_0_0	-1.6040181	-0.7580106	-0.27187717	0.000127092472507085	0.59584945	3.9724765	-1.05972156	1.5205722	616
 
 # Daten einlesen
-data = pd.read_csv(input_file, header=0)
+if input_file.endswith('.csv'):
+    data = pd.read_csv(input_file, header=0)
+elif input_file.endswith('.feather'):
+    data = pd.read_feather(input_file)
 
 # Erstellen von zwei Subplots
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(20, 10), gridspec_kw={'height_ratios': [5, 1]}, sharex=True)
@@ -23,6 +28,7 @@ summary = data.describe()
 min_values = summary.loc['min']
 max_values = summary.loc['max']
 
+print("Input names:")
 print(list_of_names)
 
 # Erster Plot (ohne Ausreißer)

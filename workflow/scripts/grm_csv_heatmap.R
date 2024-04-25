@@ -1,10 +1,10 @@
 suppressPackageStartupMessages(library(ComplexHeatmap))
-library(colorspace)
+suppressPackageStartupMessages(library(colorspace))
 suppressPackageStartupMessages(library(circlize))
 
 grm_input=snakemake@input[["grm"]]
 output_file=snakemake@output[["file"]]
-distance_method=snakemake@wildcards[["distance_method"]]
+profile=snakemake@wildcards[["profile"]]
 
 grm_table <- read.table(grm_input, header = FALSE, sep = ",")
 grm_matrix <- as.matrix(grm_table, header = FALSE)
@@ -15,7 +15,7 @@ min_val <- min(grm_matrix, na.rm = TRUE)
 max_val <- max(grm_matrix, na.rm = TRUE)
 val = max(abs(min_val), abs(max_val))
 
-color_ramp <- colorRamp2(c(-val, 0, val), c("red", "white", "blue"))
+color_ramp <- colorRamp2(c(-val, 0, val), c("red", "yellow", "white", "green", "blue"))
 
 heatmap <- Heatmap(grm_matrix,
     raster_quality = 5,
@@ -23,7 +23,7 @@ heatmap <- Heatmap(grm_matrix,
     width = unit(15, "cm"),
     height = unit(15, "cm"),
     col = color_ramp,
-    column_title = paste("Genetic relationships heatmap with", distance_method, "distance method"),
+    column_title = paste("GR heatmap of", profile),
     column_title_gp = gpar(fontsize = 14, fontface = "bold"),
     )
 

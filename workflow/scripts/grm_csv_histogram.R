@@ -1,6 +1,6 @@
 grm_input=snakemake@input[["grm"]]
 output_file=snakemake@output[["file"]]
-distance_method=snakemake@wildcards[["distance_method"]]
+profile=snakemake@wildcards[["profile"]]
 
 grm_table <- read.table(grm_input, header = FALSE, sep = ",")
 grm_matrix <- as.matrix(grm_table, header = FALSE)
@@ -13,6 +13,6 @@ hist(sorted_genetic_relationships,
     col = "black",
     xlab = "genetic relationship",
     ylab = "number of pairs",
-    main = paste("Genetic relationships Histogram with", distance_method, "distance method"),
+    main = paste("Genetic relationships Histogram of", profile),
     )
 dev.off()
