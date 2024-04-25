@@ -1,6 +1,6 @@
 ############ GENERAL ############
-jobs: 20
-latency-wait: 30000
+jobs: 10
+latency-wait: 3000
 local-cores: 1
 use-conda: True
 rerun-incomplete: True
