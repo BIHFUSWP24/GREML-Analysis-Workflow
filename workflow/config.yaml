@@ -2,12 +2,13 @@ dataset:
   workname: ukb_imp_v3
   directory: /sc-projects/sc-proj-ukb-cvd/data/0_raw/showcase_48024/ukb_genomics
   format: ukb_imp_chr{chromosome}_v3
-  keep_fam:
-    file: 100k_all_chr_eid.txt
-    from: /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/100k_snp_all_chr.h5ad
-  extract: 
-    file: 100k_all_chr_srid.txt
-    from: /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/100k_snp_all_chr.h5ad
+  annotation_file: /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/100k_snp_all_chr.h5ad
+  # keep_fam:
+  #   file: 100k_all_chr_eid.txt
+  #   from: /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/100k_snp_all_chr.h5ad
+  # extract: 
+  #   file: 100k_all_chr_srid.txt
+  #   from: /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/100k_snp_all_chr.h5ad
 
 build_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build
 results_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/results
@@ -20,42 +21,70 @@ phenotypes_selection:
   selection2: &selection2 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0, measurements_waist_circumference_f48_0_0, measurements_hip_circumference_f49_0_0, measurements_systolic_blood_pressure_automated_reading_f4080, measurements_diastolic_blood_pressure_automated_reading_f4079]
 
 profiles:
-  # PCA3000:
-  #   manipulation: PCA
+  PCA3000:
+    manipulation: pca
+    dimensions: 3000
+    distance_method: correlation
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kernelPCA3000:
+    manipulation: kernelpca
+    dimensions: 3000
+    distance_method: correlation
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  # PCA3000pearson:
+  #   manipulation: pca
   #   dimensions: 3000
-  #   distance: correlation
+  #   distance_method: pearson
+  #   chromosomes: *all_chr
+  #   phenotypes: *selection1
+  #   phenotype_file: original
+  # PCA3000spearmann:
+  #   manipulation: pca
+  #   dimensions: 3000
+  #   distance_method: spearmann
+  #   chromosomes: *all_chr
+  #   phenotypes: *selection1
+  #   phenotype_file: original
+  # PCA3000cosine:
+  #   manipulation: pca
+  #   dimensions: 3000
+  #   distance_method: cosine
   #   chromosomes: *all_chr
   #   phenotypes: *selection1
   #   phenotype_file: original
   # PCA3000norm:
-  #   manipulation: PCA
+  #   manipulation: pca
   #   dimensions: 3000
-  #   distance: correlation
+  #   distance_method: correlation
   #   chromosomes: *all_chr
   #   phenotypes: *selection2
   #   phenotype_file: normalized
   # PCA3000hf:
-  #   manipulation: PCA
+  #   manipulation: pca
   #   dimensions: 3000
-  #   distance: correlation
+  #   distance_method: correlation
   #   chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
   #   phenotypes: *selection1
   #   phenotype_file: original
-  original:
-    manipulation: none
-    chromosomes: *all_chr
-    phenotypes: *selection1
-    phenotype_file: original
-  normalized:
-    manipulation: none
-    chromosomes: *all_chr
-    phenotypes: *selection2
-    phenotype_file: normalized
-  hfchr:
-    manipulation: none
-    chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
-    phenotypes: *selection1
-    phenotype_file: original
+  # original:
+  #   manipulation: none
+  #   chromosomes: *all_chr
+  #   phenotypes: *selection1
+  #   phenotype_file: original
+  # normalized:
+  #   manipulation: none
+  #   chromosomes: *all_chr
+  #   phenotypes: *selection2
+  #   phenotype_file: normalized
+  # hfchr:
+  #   manipulation: none
+  #   chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
+  #   phenotypes: *selection1
+  #   phenotype_file: original
 
 common_phenotype_files: 
   original_encoding: &original_encoding /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/continuous_phenotypes_original_encoding.feather
@@ -84,6 +113,10 @@ phenotypes:
     original: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/binary_coronary_heart_disease_all.feather
   diabetes2:
     original: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/binary_diabetes2_all.feather
+
+
+
+
 
   # - correlation
   # - cosine

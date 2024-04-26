@@ -1,6 +1,6 @@
 rule run_greml:
     input:
-        grm_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{wildcards.profile}.grm.gz",
+        grm_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}.grm.gz",
         phenotype_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/phenotypes/{wildcards.phenotype}.{config['profiles'][wildcards.profile]['phenotype_file']}.phen",
     output:
         output_file=f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities/{{profile}}.{{phenotype}}.hsq",
@@ -9,8 +9,8 @@ rule run_greml:
         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities/{wildcards.profile}.{wildcards.phenotype}",
         output_folder=f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities",
     wildcard_constraints:
-        data_set="[^/.]+",
-        phenotype="[^/.]+",
+        profile="|".join(config['profiles'].keys()),
+        phenotype="|".join(config['phenotypes'].keys()),
     threads: config['threads']
     conda: "../../envs/embeddings.yaml"
     shell:
@@ -30,7 +30,7 @@ rule summerize_heritabilities:
                         for profile in config['profiles']
                         for phenotype in config['profiles'][profile]['phenotypes']])
     output: 
-        file=f"{config['results_directory']}/{{name}}_greml_summary.tsv",
+        file=f"{config['results_directory']}/{{name,[^/]+}}_greml_summary.tsv",
     params:
         build_directory=config['build_directory'],
         phenotypes=config['phenotypes'],

@@ -36,6 +36,13 @@ set-resources:
         mem_mb: 100000
     combine_datasets:
         mem_mb: 100000
+    run_PCA:
+        mem_mb: 100000
+    run_kernelPCA:
+        mem_mb: 100000
+    grm_dim_reduction:
+        mem_mb: 100000
+
 
 set-threads:
     filter_genome: 56
@@ -43,3 +50,6 @@ set-threads:
     merge_grm: 56
     run_greml: 56
     combine_datasets: 56
+    run_PCA: 56
+    run_kernelPCA: 56
+    grm_dim_reduction: 56
