@@ -2,10 +2,10 @@ import anndata
 from sklearn.decomposition import PCA
 import os
 
-input_file = snakemake.input["input_file"]
-output_file = snakemake.output["output_file"]
-dimensions = int(snakemake.params["dimensions"])
-chromosomes = [int(chromosome) for chromosome in snakemake.params["chromosomes"]]
+input_file = snakemake.input["input_file"] # type: ignore
+output_file = snakemake.output["output_file"] # type: ignore
+dimensions = int(snakemake.params["dimensions"]) # type: ignore
+chromosomes = [int(chromosome) for chromosome in snakemake.params["chromosomes"]] # type: ignore
 
 # input_file = "/sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/100k_snp_all_chr.h5ad"
 # output_file = "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/temp/PCA/8211dims.h5ad"
@@ -41,7 +41,6 @@ pca = PCA(n_components=dimensions)
 pca_results = pca.fit_transform(adata.X)
 
 explained_variance = [round(var, 4) for var in pca.explained_variance_ratio_]
-print(f"Explained variance per Dimension: {explained_variance}")
 print(f"Explained variance in total: {round(sum(explained_variance),4)}")
 print(f"output has shape {pca_results.shape} with first 5 rows:")
 print(pca_results[1:5, :])

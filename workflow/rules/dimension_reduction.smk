@@ -22,7 +22,7 @@ rule run_PCA:
     input: 
         input_file=config['dataset']['annotation_file']
     output:
-        output_file=f"{config['build_directory']}/{config['dataset']['workname']}/pca/{{profile,[^/]+}}.h5ad",
+        output_file=f"{config['build_directory']}/{config['dataset']['workname']}/grm/pca/{{profile,[^/]+}}.h5ad",
     params:
         dimensions=lambda wildcards: config['profiles'][wildcards.profile]['dimensions'],
         chromosomes=lambda wildcards: config['profiles'][wildcards.profile]['chromosomes'],
@@ -34,7 +34,7 @@ rule run_kernelPCA:
     input: 
         input_file=config['dataset']['annotation_file']
     output:
-        output_file=f"{config['build_directory']}/{config['dataset']['workname']}/kernelpca/{{profile,[^/]+}}.h5ad",
+        output_file=f"{config['build_directory']}/{config['dataset']['workname']}/grm/kernelpca/{{profile,[^/]+}}.h5ad",
     params:
         dimensions=lambda wildcards: config['profiles'][wildcards.profile]['dimensions'],
         chromosomes=lambda wildcards: config['profiles'][wildcards.profile]['chromosomes'],
@@ -44,11 +44,12 @@ rule run_kernelPCA:
 
 rule grm_dim_reduction:
     input: 
-        genome_input=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/{wildcards.manipulation}/{wildcards.profile}.h5ad",
+        genome_input=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{wildcards.manipulation}/{wildcards.profile}.h5ad",
     output:
-        grm=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{manipulation,pca|kernelpca}}/{{profile,[^/]+}}.grm.gz",
-        grmId=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{manipulation,pca|kernelpca}}/{{profile,[^/]+}}.grm.id",
+        grm_output=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{manipulation,pca|kernelpca}}/{{profile,[^/]+}}.grm.gz",
+        grmId_output=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{manipulation,pca|kernelpca}}/{{profile,[^/]+}}.grm.id",
     params:
         distance_method=lambda wildcards: config['profiles'][wildcards.profile]['distance_method'],
+    priority: 1
     conda: '../../envs/dimension_reduction.yaml'
     script: '../scripts/generate_grm.py'

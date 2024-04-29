@@ -3,9 +3,11 @@ import pandas as pd
 from sklearn.metrics import pairwise_distances
 import os
 
-genome_input = snakemake.input['genome_input']
-grm_output = snakemake.output['grm_output']
-distance_method = snakemake.params['distance_method']
+genome_input = snakemake.input['genome_input'] # type: ignore
+grm_output = snakemake.output['grm_output'] # type: ignore
+grmId_output = snakemake.output['grmId_output'] # type: ignore
+distance_method = snakemake.params['distance_method'] # type: ignore
+threads = snakemake.threads # type: ignore
 
 distance_methods = [
     'pearson',
@@ -50,13 +52,24 @@ print(distance_matrix[:5, :5])
 
 print("Creating flat distance matrix table...")
 n = distance_matrix.shape[0]
-distance_matrix_list = [(i+1, j+1, adata.shape[0], distance_matrix[i, j]) for i in range(n) for j in range(i+1)]
+nms = adata.shape[1]
+distance_matrix_list = [(i+1, j+1, nms, distance_matrix[i, j]) for i in range(n) for j in range(i+1)]
 distance_matrix_df_flat = pd.DataFrame(distance_matrix_list, columns=['patient1', 'patient2', 'non-missing SNPs', 'distance'])
 print(f"Distance matrix table has length {len(distance_matrix_df_flat['distance'])} with first 5 elements:")
 print(distance_matrix_df_flat.head(5))
 
+
 print("Saving distance matrix grm...")
-distance_matrix_df_flat.to_csv(grm_output, index=False, header=False, sep='\t')
+distance_matrix_df_flat.to_csv(grm_output[:-3], index=False, header=False, sep='\t')
 print("Compressing distance matrix table...")
-os.system(f"pigz -p8 {grm_output}")
+os.system(f"pigz -p{threads} {grm_output[:-3]}")
+
+print("Saving distance matrix grmId...")
+id_matrix = pd.DataFrame({
+    'FID': adata.obs['eid'],
+    'IID': adata.obs['eid'],
+})
+print(f"ID matrix has shape {id_matrix.shape} with first 5 rows and columns:")
+print(id_matrix.head(5))
+id_matrix.to_csv(grmId_output, index=False, header=False, sep='\t')
 print("Done!")

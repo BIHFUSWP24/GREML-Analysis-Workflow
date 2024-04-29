@@ -1,9 +1,19 @@
+rule get_eids_srids:
+    input:
+        input_file=config['dataset']['annotation_file'],
+    output:
+        eid_output=f"{config['build_directory']}/{config['dataset']['workname']}/grm/eid.txt",
+        srid_output=f"{config['build_directory']}/{config['dataset']['workname']}/grm/srid.txt",
+    conda: '../../envs/dimension_reduction.yaml'
+    script: '../scripts/get_eids_srids.py'
+
+
 rule filter_genome:
     input:
         bgen=lambda wildcards: f"{config['dataset']['directory']}/{config['dataset']['format']}.bgen",
         sample=lambda wildcards: f"{config['dataset']['directory']}/{config['dataset']['format']}.sample",
-        keep_fam=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['dataset']['keep_fam']['file']}",
-        extract=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['dataset']['extract']['file']}",
+        keep_fam=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/eid.txt",
+        extract=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/srid.txt",
     output:
         output_bed=f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome,[0-9]+}}.bed",
         output_bim=f"{config['build_directory']}/{config['dataset']['workname']}/bfiles/chr{{chromosome,[0-9]+}}.bim",
@@ -39,7 +49,6 @@ rule chromosome_grm:
         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/chromosomes/chr{wildcards.chromosome}",
     threads: config['threads']
     conda: "../../envs/embeddings.yaml"
-    priority: 1
     shell:
         """
         gcta64 \
@@ -67,6 +76,7 @@ rule merge_grm:
     params:
         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/{wildcards.profile}",
     threads: config['threads']
+    priority: 1
     conda: "../../envs/embeddings.yaml"
     shell:
         """

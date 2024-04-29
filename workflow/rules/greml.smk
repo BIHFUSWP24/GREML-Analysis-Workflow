@@ -1,13 +1,14 @@
 rule run_greml:
     input:
         grm_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}.grm.gz",
-        phenotype_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/phenotypes/{wildcards.phenotype}.{config['profiles'][wildcards.profile]['phenotype_file']}.phen",
+        phenotype_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/phenotypes/{config['profiles'][wildcards.profile]['phenotype_file']}/{wildcards.phenotype}.phen",
     output:
         output_file=f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities/{{profile}}.{{phenotype}}.hsq",
     params:
-        grm_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{wildcards.profile}",
+        grm_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}",
         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities/{wildcards.profile}.{wildcards.phenotype}",
         output_folder=f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities",
+        maxit=500,
     wildcard_constraints:
         profile="|".join(config['profiles'].keys()),
         phenotype="|".join(config['phenotypes'].keys()),
@@ -16,8 +17,13 @@ rule run_greml:
     shell:
         """
         mkdir -p {params.output_folder}
-        gcta64 --grm-gz {params.grm_prefix} --pheno {input.phenotype_file} --reml --out {params.output_prefix} --thread-num {threads}
+        if ! gcta64 --grm-gz {params.grm_prefix} --pheno {input.phenotype_file} --reml --reml-no-constrain --reml-maxit {params.maxit} --out {params.output_prefix} --thread-num {threads}; then
+            echo "Error occurred, creating placeholder file."
+            touch {output.output_file}
+            echo -e "Variance\\n0\\n0\\n0\\nError" > {output.output_file}
+        fi
         """
+
 
 
 rule summerize_heritabilities:
@@ -30,7 +36,7 @@ rule summerize_heritabilities:
                         for profile in config['profiles']
                         for phenotype in config['profiles'][profile]['phenotypes']])
     output: 
-        file=f"{config['results_directory']}/{{name,[^/]+}}_greml_summary.tsv",
+        file=f"{config['results_directory']}/{config['dataset']['workname']}/{{name,[^/]+}}_greml_summary.tsv",
     params:
         build_directory=config['build_directory'],
         phenotypes=config['phenotypes'],

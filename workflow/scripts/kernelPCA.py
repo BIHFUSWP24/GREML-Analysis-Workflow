@@ -3,10 +3,10 @@ from sklearn.decomposition import KernelPCA
 from sklearn.preprocessing import StandardScaler
 import os
 
-input_file = snakemake.input["input_file"]
-output_file = snakemake.output["output_file"]
-dimensions = int(snakemake.params["dimensions"])
-chromosomes = [int(chromosome) for chromosome in snakemake.params["chromosomes"]]
+input_file = snakemake.input["input_file"] # type: ignore
+output_file = snakemake.output["output_file"] # type: ignore
+dimensions = int(snakemake.params["dimensions"]) # type: ignore
+chromosomes = [int(chromosome) for chromosome in snakemake.params["chromosomes"]] # type: ignore
 
 os.makedirs(os.path.dirname(output_file), exist_ok=True)
 

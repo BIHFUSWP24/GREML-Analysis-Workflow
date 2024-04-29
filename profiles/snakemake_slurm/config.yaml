@@ -3,7 +3,7 @@
 
 ############ GENERAL ############
 jobs: 10
-latency-wait: 3000
+latency-wait: 9000
 local-cores: 1
 use-conda: True
 rerun-incomplete: True
@@ -16,6 +16,7 @@ cluster: "sbatch --partition=compute \
     --time=24:00:00 \
     --mem={resources.mem_mb} \
     --cpus-per-task={threads} \
+    --parsable \
     --output=logs/{rule}/%j_{wildcards}.out \
     --error=logs/{rule}/%j_{wildcards}.err "
 cluster-cancel: scancel
@@ -34,8 +35,6 @@ set-resources:
         mem_mb: 100000
     run_greml:
         mem_mb: 100000
-    combine_datasets:
-        mem_mb: 100000
     run_PCA:
         mem_mb: 100000
     run_kernelPCA:
@@ -45,11 +44,8 @@ set-resources:
 
 
 set-threads:
-    filter_genome: 56
-    chromosome_grm: 56
-    merge_grm: 56
-    run_greml: 56
-    combine_datasets: 56
-    run_PCA: 56
-    run_kernelPCA: 56
-    grm_dim_reduction: 56
+    filter_genome: 40
+    chromosome_grm: 40
+    merge_grm: 40
+    run_greml: 40
+    grm_dim_reduction: 10
