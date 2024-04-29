@@ -1,17 +1,19 @@
 configfile: "/sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/code/GREML/workflow/config.yaml"
 include: "rules/helpers.smk"
 include: "rules/grm.smk"
-# include: "rules/dimension_reduction.smk"
+include: "rules/dimension_reduction.smk"
 include: "rules/phenotypes.smk"
 include: "rules/greml.smk"
 include: "rules/visualization.smk"
 
-ruleorder: merge_grm > chromosome_grm > grm_to_grm_gz
+# ruleorder: merge_grm > chromosome_grm > grm_to_grm_gz
 
 
 rule all:
     input:
-        f"{config['results_directory']}/basic_greml_summary.tsv",
+        f"{config['results_directory']}/{config['dataset']['workname']}/basic_greml_summary.tsv",
+        # f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/test.grm.gz",
+        # f"{config['build_directory']}/{config['dataset']['workname']}/grm/pca/PCA3000.grm.gz",
         # f"{config['results_directory']}/ukb_imp_v3_greml_summary.tsv",
         # f"{config['build_directory']}/ukb_imp_v3_f/ukb_imp_v3.bed",
         # expand("{build_directory}/ukb_imp_v3_f/PCA/{dimensions}dims.h5ad", build_directory=config['build_directory'], dimensions=10),

@@ -9,9 +9,9 @@ file_names <- basename(input_files)
 print("Input files:")
 print(input_files)
 
-parts <- strsplit(file_names, "_(?=[^_]+\\.[^_]+$)|\\.(?=[^\\.]+$)", perl=TRUE)
-phenotype_list <- sapply(parts, function(x) { return(x[1]) })
-categories <- sapply(parts, function(x) { return(x[2]) })
+parts <- strsplit(file_names, ".", fixed = TRUE)
+categories <- sapply(parts, function(x) { return(x[1]) })
+phenotype_list <- sapply(parts, function(x) { return(x[2]) })
 
 heritabilities <- sapply(input_files, function(file) {
     data <- read.delim(file, header = TRUE, sep = "\t", fill = TRUE)

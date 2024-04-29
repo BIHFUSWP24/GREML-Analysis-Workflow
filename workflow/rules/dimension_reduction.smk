@@ -1,58 +1,55 @@
-rule write_bed_selection:
-    output: f"{config['build_directory']}/{{data_set}}/multi-bed-selection.txt",
-    params:
-        chromosomes = config['chromosomes'],
-        build_directory = config['build_directory'],
-    shell:
-        """
-        data_set={wildcards.data_set}
-        build_directory={params.build_directory}
-        for chrom in {params.chromosomes};
-        do
-            echo "${{build_directory}}/${{data_set}}/chr${{chrom}}.bed ${{build_directory}}/${{data_set}}/chr${{chrom}}.bim ${{build_directory}}/${{data_set}}/chr${{chrom}}.fam" >> {output}
-        done
-        """
-
-
 # plink2 --pmerge-list /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/multi-bed-selection.txt --make-bed --out /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/ukb_imp_v3_f/ukb_imp_v3
-rule combine_datasets:
-    input:
-        input_bed = expand("{build_directory}/{{data_set}}_f/chr{chromosome}.bed", build_directory=config['build_directory'], chromosome=config['chromosomes']),
-        input_bim = expand("{build_directory}/{{data_set}}_f/chr{chromosome}.bim", build_directory=config['build_directory'], chromosome=config['chromosomes']),
-        input_fam = expand("{build_directory}/{{data_set}}_f/chr{chromosome}.fam", build_directory=config['build_directory'], chromosome=config['chromosomes']),
-        selection = f"{config['build_directory']}/{{data_set}}_f/multi-bed-selection.txt",
-    output: 
-        output_bed = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.bed",
-        output_bim = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.bim",
-        output_fam = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}.fam",
-    conda: '../../envs/embeddings.yaml'
-    params:
-        output_prefix = f"{config['build_directory']}/{{data_set}}_f/{{data_set}}",
-        first_prefix = f"{config['build_directory']}/{{data_set}}_f/chr{config['chromosomes'][0]}",
-    shell:
-        """
-        plink2 --pmerge-list {input.selection} --make-bed --out {params.output_prefix}
-        """
+# rule combine_datasets:
+#     input:
+#         input_bed=lambda wildcards: expand("{build_directory}/{workname}/bfiles/chr{chromosome}.bed", build_directory=config['build_directory'], workname=config['dataset']['workname'], chromosome=config['profiles'][wildcards.profile]['chromosomes']),
+#         input_bim=lambda wildcards: expand("{build_directory}/{workname}/bfiles/chr{chromosome}.bim", build_directory=config['build_directory'], workname=config['dataset']['workname'], chromosome=config['profiles'][wildcards.profile]['chromosomes']),
+#         input_fam=lambda wildcards: expand("{build_directory}/{workname}/bfiles/chr{chromosome}.fam", build_directory=config['build_directory'], workname=config['dataset']['workname'], chromosome=config['profiles'][wildcards.profile]['chromosomes']),
+#         selection=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/multi-bed-selection/{wildcards.profile}.txt",
+#     output:
+#         output_bed=f"{config['build_directory']}/{config['dataset']['workname']}/combinedBflies/{{profile,[^/]+}}.bed",
+#         output_bim=f"{config['build_directory']}/{config['dataset']['workname']}/combinedBflies/{{profile,[^/]+}}.bim",
+#         output_fam=f"{config['build_directory']}/{config['dataset']['workname']}/combinedBflies/{{profile,[^/]+}}.fam",
+#     conda: '../../envs/embeddings.yaml'
+#     params:
+#         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/combinedBflies/{wildcards.profile}",
+#     shell:
+#         """
+#         plink2 --pmerge-list {input.selection} --make-bed --out {params.output_prefix}
+#         """
 
 
-rule PCA:
-    input: input_file = f"{config['data_directory']}/{{name}}.h5ad"
-    output: output_file = f"{config['build_directory']}/{{data_set}}_f/PCA/{{dimensions}}dims.h5ad"
-    conda: '../../envs/dimension_reduction.yaml'
-    script: '../scripts/embeddings/PCA.py'
-
-
-rule kernelPCA:
-    input: input_file = f"{config['build_directory']}/{{name}}.h5ad"
-    output: output_file = f"{config['build_directory']}/{{name}}/kernelPCA/{{dimensions}}dims.h5ad"
-    conda: '../../envs/dimension_reduction.yaml'
-    script: '../scripts/embeddings/kernelPCA.py'
-
-
-rule distances:
-    input: input_file = f"{config['build_directory']}/{{dir}}.h5ad"
+rule run_PCA:
+    input: 
+        input_file=config['dataset']['annotation_file']
     output:
-        grm_output = f"{config['build_directory']}/{{dir}}/{{distance_method}}.grm",
-        gz_output = f"{config['build_directory']}/{{dir}}/{{distance_method}}.grm.gz",
-    log: 'logs/{dir}/{distance_method}.log'
-    script: '../scripts/distance_matrix.py'
+        output_file=f"{config['build_directory']}/{config['dataset']['workname']}/grm/pca/{{profile,[^/]+}}.h5ad",
+    params:
+        dimensions=lambda wildcards: config['profiles'][wildcards.profile]['dimensions'],
+        chromosomes=lambda wildcards: config['profiles'][wildcards.profile]['chromosomes'],
+    conda: '../../envs/dimension_reduction.yaml'
+    script: '../scripts/PCA.py'
+
+
+rule run_kernelPCA:
+    input: 
+        input_file=config['dataset']['annotation_file']
+    output:
+        output_file=f"{config['build_directory']}/{config['dataset']['workname']}/grm/kernelpca/{{profile,[^/]+}}.h5ad",
+    params:
+        dimensions=lambda wildcards: config['profiles'][wildcards.profile]['dimensions'],
+        chromosomes=lambda wildcards: config['profiles'][wildcards.profile]['chromosomes'],
+    conda: '../../envs/dimension_reduction.yaml'
+    script: '../scripts/kernelPCA.py'
+
+
+rule grm_dim_reduction:
+    input: 
+        genome_input=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{wildcards.manipulation}/{wildcards.profile}.h5ad",
+    output:
+        grm_output=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{manipulation,pca|kernelpca}}/{{profile,[^/]+}}.grm.gz",
+        grmId_output=f"{config['build_directory']}/{config['dataset']['workname']}/grm/{{manipulation,pca|kernelpca}}/{{profile,[^/]+}}.grm.id",
+    params:
+        distance_method=lambda wildcards: config['profiles'][wildcards.profile]['distance_method'],
+    priority: 1
+    conda: '../../envs/dimension_reduction.yaml'
+    script: '../scripts/generate_grm.py'

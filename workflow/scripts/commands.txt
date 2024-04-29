@@ -34,3 +34,5 @@ bgenix -g /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.bgen
 cut -f2 bgen_list.txt > bgen_list_s1.txt
 (4. filter eids from .sample)
 cut -d' ' -f1 /sc-projects/sc-proj-dh-ag-eils-ml/genotype_data/ukb_imp_chr22_v3.sample > /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/lesi11/build/sample_eid_list.txt
+
+squeue -u $USER | awk '{print $1}' | tail -n+2 | xargs scancel
