@@ -4,6 +4,7 @@ from sklearn.metrics import pairwise_distances
 import os
 
 genome_input = snakemake.input['genome_input'] # type: ignore
+nms_input = snakemake.input['nms_input'] # type: ignore
 grm_output = snakemake.output['grm_output'] # type: ignore
 grmId_output = snakemake.output['grmId_output'] # type: ignore
 distance_method = snakemake.params['distance_method'] # type: ignore
@@ -50,9 +51,12 @@ else:
 print(f"Distance matrix has shape {distance_matrix.shape} with first 5 rows and columns:")
 print(distance_matrix[:5, :5])
 
+print(f"Loading non-missing SNPs...")
+nms = int(open(nms_input).read())
+print(f"Non-missing SNPs: {nms}")
+
 print("Creating flat distance matrix table...")
 n = distance_matrix.shape[0]
-nms = adata.shape[1]
 distance_matrix_list = [(i+1, j+1, nms, distance_matrix[i, j]) for i in range(n) for j in range(i+1)]
 distance_matrix_df_flat = pd.DataFrame(distance_matrix_list, columns=['patient1', 'patient2', 'non-missing SNPs', 'distance'])
 print(f"Distance matrix table has length {len(distance_matrix_df_flat['distance'])} with first 5 elements:")

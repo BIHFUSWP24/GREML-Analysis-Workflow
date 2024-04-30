@@ -8,7 +8,7 @@ rule run_greml:
         grm_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}",
         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities/{wildcards.profile}.{wildcards.phenotype}",
         output_folder=f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities",
-        maxit=500,
+        maxit=250,
     wildcard_constraints:
         profile="|".join(config['profiles'].keys()),
         phenotype="|".join(config['phenotypes'].keys()),
@@ -20,7 +20,6 @@ rule run_greml:
         if ! gcta64 --grm-gz {params.grm_prefix} --pheno {input.phenotype_file} --reml --reml-no-constrain --reml-maxit {params.maxit} --out {params.output_prefix} --thread-num {threads}; then
             echo "Error occurred, creating placeholder file."
             touch {output.output_file}
-            echo -e "Variance\\n0\\n0\\n0\\nError" > {output.output_file}
         fi
         """
 

@@ -13,10 +13,12 @@ parts <- strsplit(file_names, ".", fixed = TRUE)
 categories <- sapply(parts, function(x) { return(x[1]) })
 phenotype_list <- sapply(parts, function(x) { return(x[2]) })
 
-heritabilities <- sapply(input_files, function(file) {
-    data <- read.delim(file, header = TRUE, sep = "\t", fill = TRUE)
-    data$Variance[4]
-})
+heritabilities <- sapply(input_files, function(file) { 
+    if (file.size(file) == 0) {
+        "Error"
+    } else {
+        data <- read.delim(file, header = TRUE, sep = "\t", fill = TRUE)
+        data$Variance[4]}})
 
 df <- data.frame(Phenotype=phenotype_list, Category=categories, Heritability=heritabilities)
 
