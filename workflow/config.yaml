@@ -13,72 +13,90 @@ chromosomes_all: &all_chr [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
 phenotypes_selection:
   selection1: &selection1 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0, measurements_waist_circumference_f48_0_0, measurements_hip_circumference_f49_0_0, measurements_systolic_blood_pressure_automated_reading_f4080, measurements_diastolic_blood_pressure_automated_reading_f4079, coronary_heart_disease, diabetes2]
   selection2: &selection2 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0, measurements_waist_circumference_f48_0_0, measurements_hip_circumference_f49_0_0, measurements_systolic_blood_pressure_automated_reading_f4080, measurements_diastolic_blood_pressure_automated_reading_f4079]
+  selection1: &selection3 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0]
 
 profiles:
-  PCA90:
-    manipulation: pca
-    dimensions: 1932
-    distance_method: correlation
+  Original:
+    manipulation: none
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  kernelPCA90:
+  kernelPCA100%:
     manipulation: kernelpca
-    dimensions: 1932
-    distance_method: correlation
-    chromosomes: *all_chr
-    phenotypes: *selection1
-    phenotype_file: original
-  PCA90pearson:
-    manipulation: pca
-    dimensions: 1932
+    dimensions: 8211
     distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  PCA90spearmann:
+  PCA100%:
     manipulation: pca
-    dimensions: 1932
-    distance_method: spearman
+    dimensions: 8211
+    distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  PCA90cosine:
+  kernelPCA99%5:
+    manipulation: kernelpca
+    dimensions: 4920
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  PCA99%5:
     manipulation: pca
-    dimensions: 1932
-    distance_method: cosine
+    dimensions: 4920
+    distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  PCA90norm:
+  kernelPCA99%:
+    manipulation: kernelpca
+    dimensions: 4311
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  PCA99%:
     manipulation: pca
-    dimensions: 1932
-    distance_method: correlation
-    chromosomes: *all_chr
-    phenotypes: *selection2
-    phenotype_file: normalized
-  PCA90hf:
-    manipulation: pca
-    dimensions: 1932
-    distance_method: correlation
-    chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
-    phenotypes: *selection1
-    phenotype_file: original
-  original:
-    manipulation: none
+    dimensions: 4311
+    distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  normalized:
-    manipulation: none
-    chromosomes: *all_chr
-    phenotypes: *selection2
-    phenotype_file: normalized
-  hfchr:
-    manipulation: none
-    chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
-    phenotypes: *selection1
-    phenotype_file: original
+
+
+  # Normalized:
+  #   manipulation: none
+  #   chromosomes: *all_chr
+  #   phenotypes: *selection3
+  #   phenotype_file: normalized
+  # PCA100norm:
+  #   manipulation: pca
+  #   dimensions: 8211
+  #   distance_method: pearson
+  #   chromosomes: *all_chr
+  #   phenotypes: *selection3
+  #   phenotype_file: normalized
+  # kernelPCA100norm:
+  #   manipulation: kernelpca
+  #   dimensions: 8211
+  #   distance_method: pearson
+  #   chromosomes: *all_chr
+  #   phenotypes: *selection3
+  #   phenotype_file: normalized
+
+  # hfchr:
+  #   manipulation: none
+  #   chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
+  #   phenotypes: *selection1
+  #   phenotype_file: original
+  # PCA100hfchr:
+  #   manipulation: pca
+  #   dimensions: 8211
+  #   distance_method: pearson
+  #   chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
+  #   phenotypes: *selection1
+  #   phenotype_file: original
 
 common_phenotype_files: 
   original_encoding: &original_encoding /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/continuous_phenotypes_original_encoding.feather
@@ -127,14 +145,6 @@ phenotypes:
   # - minkowski
   # - seuclidean
   # - sqeuclidean
-
-plot_methods: 
-  - heatmap
-
-maf: 0.01
-grm_cutoff: 0.025
-covariates: False
-
 
   # - labs_ldl_direct_f30780_0_0
   # - labs_hdl_cholesterol_f30760_0_0
