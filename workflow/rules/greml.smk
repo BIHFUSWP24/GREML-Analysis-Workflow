@@ -35,9 +35,8 @@ rule summerize_heritabilities:
                         for profile in config['profiles']
                         for phenotype in config['profiles'][profile]['phenotypes']])
     output: 
-        file=f"{config['results_directory']}/{config['dataset']['workname']}/{{name,[^/]+}}_greml_summary.tsv",
+        file=f"{config['results_directory']}/{config['dataset']['workname']}/{config['analysis']}_heritability_summary.tsv",
     params:
-        build_directory=config['build_directory'],
-        phenotypes=config['phenotypes'],
+        manipulations=[config['profiles'][profile]['manipulation'] for profile in config['profiles']],
     conda: "../../envs/r_basic.yaml"
     script: "../scripts/heritability_summary.R"

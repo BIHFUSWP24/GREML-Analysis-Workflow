@@ -1,0 +1,10 @@
+channels:
+    - conda-forge
+    - bioconda
+dependencies:
+    - r-base
+    - r-colorspace
+    - r-circlize
+    - r-forcats
+    - bioconductor-complexheatmap
+    - r-magick

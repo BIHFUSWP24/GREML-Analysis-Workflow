@@ -1,3 +1,5 @@
+analysis: analysis1
+
 dataset:
   workname: ukb_imp_v3
   directory: /sc-projects/sc-proj-ukb-cvd/data/0_raw/showcase_48024/ukb_genomics
@@ -14,6 +16,27 @@ phenotypes_selection:
   selection1: &selection1 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0, measurements_waist_circumference_f48_0_0, measurements_hip_circumference_f49_0_0, measurements_systolic_blood_pressure_automated_reading_f4080, measurements_diastolic_blood_pressure_automated_reading_f4079, coronary_heart_disease, diabetes2]
   selection2: &selection2 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0, measurements_waist_circumference_f48_0_0, measurements_hip_circumference_f49_0_0, measurements_systolic_blood_pressure_automated_reading_f4080, measurements_diastolic_blood_pressure_automated_reading_f4079]
   selection1: &selection3 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0]
+
+# profiles:
+#   Original:
+#     manipulation: none
+#     chromosomes: [22]
+#     phenotypes: [measurements_standing_height_f50_0_0]
+#     phenotype_file: original
+#   kernelPCA:
+#     manipulation: kernelpca
+#     dimensions: 8211
+#     distance_method: pearson
+#     chromosomes: [22]
+#     phenotypes: [measurements_standing_height_f50_0_0]
+#     phenotype_file: original
+#   PCA:
+#     manipulation: pca
+#     dimensions: 8211
+#     distance_method: pearson
+#     chromosomes: [22]
+#     phenotypes: [measurements_standing_height_f50_0_0]
+#     phenotype_file: original
 
 profiles:
   Original:
@@ -104,27 +127,55 @@ common_phenotype_files:
 
 phenotypes:
   measurements_standing_height_f50_0_0:
-    original: *original_encoding
-    normalized: *normalized_encoding
+    original:
+      name: Height
+      file: *original_encoding
+    normalized:
+      name: normHeight
+      file: *normalized_encoding
   measurements_body_mass_index_bmi_f21001_0_0:
-    original: *original_encoding
-    normalized: *normalized_encoding
+    original:
+      name: BMI
+      file: *original_encoding
+    normalized:
+      name: normBMI
+      file: *normalized_encoding
   measurements_waist_circumference_f48_0_0:
-    original: *original_encoding
-    normalized: *normalized_encoding
+    original:
+      name: Waist
+      file: *original_encoding
+    normalized:
+      name: normWaist
+      file: *normalized_encoding
   measurements_hip_circumference_f49_0_0:
-    original: *original_encoding
-    normalized: *normalized_encoding
+    original:
+      name: Hip
+      file: *original_encoding
+    normalized:
+      name: normHip
+      file: *normalized_encoding
   measurements_systolic_blood_pressure_automated_reading_f4080:
-    original: *original_encoding
-    normalized: *normalized_encoding
+    original:
+      name: SBP
+      file: *original_encoding
+    normalized:
+      name: normSBP
+      file: *normalized_encoding
   measurements_diastolic_blood_pressure_automated_reading_f4079:
-    original: *original_encoding
-    normalized: *normalized_encoding
+    original:
+      name: DBP
+      file: *original_encoding
+    normalized:
+      name: normDBP
+      file: *normalized_encoding
   coronary_heart_disease:
-    original: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/binary_coronary_heart_disease_all.feather
+    original:
+      name: CHD
+      file: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/binary_coronary_heart_disease_all.feather
   diabetes2:
-    original: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/binary_diabetes2_all.feather
+    original:
+      name: Diabetes
+      file: /sc-projects/sc-proj-dh-ag-eils-ml/phenotype_data/binary_diabetes2_all.feather
 
 
 

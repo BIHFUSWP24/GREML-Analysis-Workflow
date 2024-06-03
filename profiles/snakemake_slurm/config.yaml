@@ -19,7 +19,7 @@ cluster: "sbatch --partition=compute \
     --parsable \
     --output=logs/{rule}/%j_{wildcards}.out \
     --error=logs/{rule}/%j_{wildcards}.err "
-cluster-cancel: scancel
+cluster-cancel: "squeue -u $USER | awk '{print $1}' | tail -n+2 | xargs scancel"
 
 ############ RESOURCES ############
 default-resources:
@@ -40,6 +40,8 @@ set-resources:
     run_kernelPCA:
         mem_mb: 100000
     grm_dim_reduction:
+        mem_mb: 100000
+    grm_heatmap:
         mem_mb: 100000
 
 
