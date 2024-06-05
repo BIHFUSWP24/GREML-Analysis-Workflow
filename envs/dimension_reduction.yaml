@@ -5,3 +5,6 @@ dependencies:
     - python=3.12.3
     - scikit-learn=1.4.2
     - anndata=0.10.7
+    - numpy
+    - pandas
+    - matplotlib

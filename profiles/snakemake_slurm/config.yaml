@@ -43,6 +43,10 @@ set-resources:
         mem_mb: 100000
     grm_heatmap:
         mem_mb: 100000
+    generate_pca_variances:
+        mem_mb: 100000
+    generate_kernelpca_variances:
+        mem_mb: 100000
 
 
 set-threads:

@@ -1,4 +1,4 @@
-analysis: analysis1
+analysis: analysis7VarianceComparison
 
 dataset:
   workname: ukb_imp_v3
@@ -11,77 +11,192 @@ results_directory: /sc-projects/sc-proj-dh-ukb-intergenics/analysis/development/
 
 threads: 2
 
-chromosomes_all: &all_chr [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+chromosomes_selection:
+  all_chr: &all_chr [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
 phenotypes_selection:
   selection1: &selection1 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0, measurements_waist_circumference_f48_0_0, measurements_hip_circumference_f49_0_0, measurements_systolic_blood_pressure_automated_reading_f4080, measurements_diastolic_blood_pressure_automated_reading_f4079, coronary_heart_disease, diabetes2]
   selection2: &selection2 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0, measurements_waist_circumference_f48_0_0, measurements_hip_circumference_f49_0_0, measurements_systolic_blood_pressure_automated_reading_f4080, measurements_diastolic_blood_pressure_automated_reading_f4079]
   selection1: &selection3 [measurements_standing_height_f50_0_0, measurements_body_mass_index_bmi_f21001_0_0]
 
-# profiles:
-#   Original:
-#     manipulation: none
-#     chromosomes: [22]
-#     phenotypes: [measurements_standing_height_f50_0_0]
-#     phenotype_file: original
-#   kernelPCA:
-#     manipulation: kernelpca
-#     dimensions: 8211
-#     distance_method: pearson
-#     chromosomes: [22]
-#     phenotypes: [measurements_standing_height_f50_0_0]
-#     phenotype_file: original
-#   PCA:
-#     manipulation: pca
-#     dimensions: 8211
-#     distance_method: pearson
-#     chromosomes: [22]
-#     phenotypes: [measurements_standing_height_f50_0_0]
-#     phenotype_file: original
-
+# variance comparison profiles
 profiles:
   Original:
-    manipulation: none
+    method: none
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  kernelPCA100%:
-    manipulation: kernelpca
-    dimensions: 8211
+  PCAmaxDims:
+    method: pca
+    dimensions: all
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCAmaxDims:
+    method: kernelpca
+    kernel: rbf
+    dimensions: all
     distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
   PCA100%:
-    manipulation: pca
-    dimensions: 8211
+    method: pca
+    variance: 1
     distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  kernelPCA99%5:
-    manipulation: kernelpca
-    dimensions: 4920
+  kPCA100%:
+    method: kernelpca
+    kernel: rbf
+    variance: 1
     distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  PCA99%5:
-    manipulation: pca
-    dimensions: 4920
+  PCA90%:
+    method: pca
+    variance: 0.9
     distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  kernelPCA99%:
-    manipulation: kernelpca
-    dimensions: 4311
+  kPCA90%:
+    method: kernelpca
+    kernel: rbf
+    variance: 0.9
     distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
     phenotype_file: original
-  PCA99%:
-    manipulation: pca
-    dimensions: 4311
+  PCA80%:
+    method: pca
+    variance: 0.8
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCA80%:
+    method: kernelpca
+    kernel: rbf
+    variance: 0.8
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+
+# Dimension comparison profiles
+profilesDims:
+  Original:
+    method: none
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  PCAmaxDims:
+    method: pca
+    dimensions: all
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCAmaxDims:
+    method: kernelpca
+    kernel: rbf
+    dimensions: all
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  PCA9000:
+    method: pca
+    dimensions: 9000
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCA9000:
+    method: kernelpca
+    kernel: rbf
+    dimensions: 9000
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  PCA8000:
+    method: pca
+    dimensions: 8000
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCA8000:
+    method: kernelpca
+    kernel: rbf
+    dimensions: 8000
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  PCA7000:
+    method: pca
+    dimensions: 7000
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCA7000:
+    method: kernelpca
+    kernel: rbf
+    dimensions: 7000
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+
+
+# kernel comparison profiles
+profilesKernel:
+  Original:
+    method: none
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  PCA:
+    method: pca
+    dimensions: all
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCAlinear:
+    method: kernelpca
+    kernel: linear
+    dimensions: all
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCApoly:
+    method: kernelpca
+    kernel: poly
+    dimensions: all
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCArbf:
+    method: kernelpca
+    kernel: rbf
+    dimensions: all
+    distance_method: pearson
+    chromosomes: *all_chr
+    phenotypes: *selection1
+    phenotype_file: original
+  kPCAcosine:
+    method: kernelpca
+    kernel: cosine
+    dimensions: all
     distance_method: pearson
     chromosomes: *all_chr
     phenotypes: *selection1
@@ -89,33 +204,33 @@ profiles:
 
 
   # Normalized:
-  #   manipulation: none
+  #   method: none
   #   chromosomes: *all_chr
   #   phenotypes: *selection3
   #   phenotype_file: normalized
   # PCA100norm:
-  #   manipulation: pca
-  #   dimensions: 8211
+  #   method: pca
+  #   dimensions: 8216
   #   distance_method: pearson
   #   chromosomes: *all_chr
   #   phenotypes: *selection3
   #   phenotype_file: normalized
   # kernelPCA100norm:
-  #   manipulation: kernelpca
-  #   dimensions: 8211
+  #   method: kernelpca
+  #   dimensions: 8216
   #   distance_method: pearson
   #   chromosomes: *all_chr
   #   phenotypes: *selection3
   #   phenotype_file: normalized
 
   # hfchr:
-  #   manipulation: none
+  #   method: none
   #   chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
   #   phenotypes: *selection1
   #   phenotype_file: original
   # PCA100hfchr:
-  #   manipulation: pca
-  #   dimensions: 8211
+  #   method: pca
+  #   dimensions: 8216
   #   distance_method: pearson
   #   chromosomes: [1, 11, 12, 15, 16, 17, 19, 20, 22]
   #   phenotypes: *selection1

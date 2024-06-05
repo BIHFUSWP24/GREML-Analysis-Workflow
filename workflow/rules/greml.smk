@@ -1,11 +1,11 @@
 rule run_greml:
     input:
-        grm_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}.grm.gz",
+        grm_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['method']}/{wildcards.profile}.grm.gz",
         phenotype_file=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/phenotypes/{config['profiles'][wildcards.profile]['phenotype_file']}/{wildcards.phenotype}.phen",
     output:
         output_file=f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities/{{profile}}.{{phenotype}}.hsq",
     params:
-        grm_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}",
+        grm_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['method']}/{wildcards.profile}",
         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities/{wildcards.profile}.{wildcards.phenotype}",
         output_folder=f"{config['build_directory']}/{config['dataset']['workname']}/heritabilities",
         maxit=250,
@@ -37,6 +37,6 @@ rule summerize_heritabilities:
     output: 
         file=f"{config['results_directory']}/{config['dataset']['workname']}/{config['analysis']}_heritability_summary.tsv",
     params:
-        manipulations=[config['profiles'][profile]['manipulation'] for profile in config['profiles']],
+        methods=[config['profiles'][profile]['method'] for profile in config['profiles']],
     conda: "../../envs/r_basic.yaml"
     script: "../scripts/heritability_summary.R"

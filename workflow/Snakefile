@@ -11,7 +11,7 @@ include: "rules/visualization.smk"
 
 rule all:
     input:
-        # f"{config['results_directory']}/{config['dataset']['workname']}/{config['analysis']}_summary.pdf",
+        f"{config['results_directory']}/{config['dataset']['workname']}/{config['analysis']}_summary.pdf",
+        # f"{config['results_directory']}/{config['dataset']['workname']}/{config['analysis']}_heritability_summary.tsv",
         # expand("{results_directory}/{workname}/heatmap/{profile}.png", results_directory=config['results_directory'], workname=config['dataset']['workname'], profile=config['profiles']),
         # expand("{results_directory}/{workname}/heatmap/{profile}.png", results_directory=config['results_directory'], workname=config['dataset']['workname'], profile="PCA100%"),
-        f"{config['results_directory']}/{config['dataset']['workname']}/{config['analysis']}_heritability_summary.tsv",

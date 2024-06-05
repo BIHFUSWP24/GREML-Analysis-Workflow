@@ -59,30 +59,30 @@ rule chromosome_grm:
         """
 
 
-rule merge_grm:
-    input: 
-        grm=lambda wildcards: expand("{directory}/{workname}/grm/chromosomes/chr{chromosome}.grm.gz",
-            directory=config['build_directory'],
-            workname=config['dataset']['workname'],
-            chromosome=config['profiles'][wildcards.profile]['chromosomes']),
-        grmId=lambda wildcards: expand("{directory}/{workname}/grm/chromosomes/chr{chromosome}.grm.id",
-            directory=config['build_directory'],
-            workname=config['dataset']['workname'],
-            chromosome=config['profiles'][wildcards.profile]['chromosomes']),
-        selection=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/multi-grm-selections/{wildcards.profile}.txt",
-    output:
-        grm=f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/{{profile,[^/]+}}.grm.gz",
-        grmId=f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/{{profile,[^/]+}}.grm.id",
-    params:
-        output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/{wildcards.profile}",
-    threads: config['threads']
-    priority: 1
-    conda: "../../envs/embeddings.yaml"
-    shell:
-        """
-        gcta64 \
-            --mgrm-gz {input.selection} \
-            --make-grm-gz \
-            --thread-num {threads} \
-            --out {params.output_prefix}
-        """
+# rule merge_grm:
+#     input: 
+#         grm=lambda wildcards: expand("{directory}/{workname}/grm/chromosomes/chr{chromosome}.grm.gz",
+#             directory=config['build_directory'],
+#             workname=config['dataset']['workname'],
+#             chromosome=config['profiles'][wildcards.profile]['chromosomes']),
+#         grmId=lambda wildcards: expand("{directory}/{workname}/grm/chromosomes/chr{chromosome}.grm.id",
+#             directory=config['build_directory'],
+#             workname=config['dataset']['workname'],
+#             chromosome=config['profiles'][wildcards.profile]['chromosomes']),
+#         selection=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/multi-grm-selections/{wildcards.profile}.txt",
+#     output:
+#         grm=f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/{{profile,[^/]+}}.grm.gz",
+#         grmId=f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/{{profile,[^/]+}}.grm.id",
+#     params:
+#         output_prefix=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/none/{wildcards.profile}",
+#     threads: config['threads']
+#     priority: 1
+#     conda: "../../envs/embeddings.yaml"
+#     shell:
+#         """
+#         gcta64 \
+#             --mgrm-gz {input.selection} \
+#             --make-grm-gz \
+#             --thread-num {threads} \
+#             --out {params.output_prefix}
+#         """

@@ -1,7 +1,7 @@
 rule grm_heatmap:
     input:
-        grm=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}.grm.gz",
-        grmID=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['manipulation']}/{wildcards.profile}.grm.id",
+        grm=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['method']}/{wildcards.profile}.grm.gz",
+        grmID=lambda wildcards: f"{config['build_directory']}/{config['dataset']['workname']}/grm/{config['profiles'][wildcards.profile]['method']}/{wildcards.profile}.grm.id",
         phenotype_inputs=lambda wildcards: expand("{build_directory}/{workname}/phenotypes/{phenotype_file}/{phenotype}.phen", build_directory=config['build_directory'], workname=config['dataset']['workname'], phenotype_file=config['profiles'][wildcards.profile]['phenotype_file'], phenotype=config['profiles'][wildcards.profile]['phenotypes']),
     output: file=f"{config['results_directory']}/{config['dataset']['workname']}/heatmap/{{profile}}.png",
     params:
